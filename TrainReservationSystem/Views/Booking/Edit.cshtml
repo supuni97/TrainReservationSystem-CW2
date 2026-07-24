@@ -1,0 +1,223 @@
+@model TrainReservationSystem.Models.Booking
+
+@{
+    ViewData["Title"] = "Edit Booking";
+}
+
+<div class="container mt-4">
+
+    <div class="page-card">
+
+        <div class="page-header">
+
+            <h3>
+                <i class="bi bi-pencil-square"></i>
+                Edit Booking
+            </h3>
+
+            <small>
+                Update the booking information below.
+            </small>
+
+        </div>
+
+        <div class="card-body">
+
+            <form asp-action="Edit" method="post">
+
+                <input asp-for="Id" type="hidden" />
+
+                <div asp-validation-summary="ModelOnly" class="alert alert-danger">
+                </div>
+
+                <div class="row mb-3">
+
+                    <div class="col-md-4">
+
+                        <label class="form-label">
+                            Booking ID
+                        </label>
+
+                        <input class="form-control" value="@Model.Id" readonly />
+
+                    </div>
+
+                    <div class="col-md-8">
+
+                        <label asp-for="TrainName" class="form-label">
+                        </label>
+
+                        <select asp-for="TrainName" class="form-select">
+
+                            <option>Intercity Express</option>
+                            <option>Udarata Menike</option>
+                            <option>Yal Devi</option>
+                            <option>Ruhunu Kumari</option>
+                            <option>Podi Menike</option>
+
+                        </select>
+
+                        <span asp-validation-for="TrainName" class="text-danger"></span>
+
+                    </div>
+
+                </div>
+
+                <div class="row">
+
+                    <div class="col-md-6 mb-3">
+
+                        <label asp-for="FromStation" class="form-label">
+                        </label>
+
+                        <select asp-for="FromStation" class="form-select">
+
+                            <option>Colombo Fort</option>
+                            <option>Maradana</option>
+                            <option>Kandy</option>
+                            <option>Peradeniya</option>
+                            <option>Hatton</option>
+                            <option>Nanu Oya</option>
+                            <option>Ella</option>
+                            <option>Badulla</option>
+                            <option>Galle</option>
+                            <option>Matara</option>
+                            <option>Anuradhapura</option>
+                            <option>Jaffna</option>
+
+                        </select>
+
+                        <span asp-validation-for="FromStation" class="text-danger"></span>
+
+                    </div>
+
+                    <div class="col-md-6 mb-3">
+
+                        <label asp-for="ToStation" class="form-label">
+                        </label>
+
+                        <select asp-for="ToStation" class="form-select">
+
+                            <option>Colombo Fort</option>
+                            <option>Maradana</option>
+                            <option>Kandy</option>
+                            <option>Peradeniya</option>
+                            <option>Hatton</option>
+                            <option>Nanu Oya</option>
+                            <option>Ella</option>
+                            <option>Badulla</option>
+                            <option>Galle</option>
+                            <option>Matara</option>
+                            <option>Anuradhapura</option>
+                            <option>Jaffna</option>
+
+                        </select>
+
+                        <span asp-validation-for="ToStation" class="text-danger"></span>
+
+                    </div>
+
+                </div>
+
+                <div class="row">
+
+                    <div class="col-md-4 mb-3">
+
+                        <label asp-for="TravelDate" class="form-label">
+                        </label>
+
+                        <input asp-for="TravelDate" type="date" class="form-control" />
+
+                        <span asp-validation-for="TravelDate" class="text-danger"></span>
+
+                    </div>
+
+                    <div class="col-md-4 mb-3">
+
+                        <label asp-for="DepartureTime" class="form-label">
+                        </label>
+
+                        <input asp-for="DepartureTime" type="time" class="form-control" />
+
+                        <span asp-validation-for="DepartureTime" class="text-danger"></span>
+
+                    </div>
+
+                    <div class="col-md-4 mb-3">
+
+                        <label asp-for="SeatNumber" class="form-label">
+                        </label>
+
+                        <input asp-for="SeatNumber" class="form-control" maxlength="3" />
+
+                        <span asp-validation-for="SeatNumber" class="text-danger"></span>
+
+                    </div>
+
+                </div>
+
+                <div class="row">
+
+                    <div class="col-md-6 mb-3">
+
+                        <label asp-for="TicketPrice" class="form-label">
+                        </label>
+
+                        <input asp-for="TicketPrice" type="number" min="100" step="50" class="form-control" />
+
+                        <span asp-validation-for="TicketPrice" class="text-danger"></span>
+
+                    </div>
+
+                    <div class="col-md-6 mb-3">
+
+                        <label asp-for="Status" class="form-label">
+                        </label>
+
+                        <select asp-for="Status" class="form-select">
+
+                            <option>Confirmed</option>
+                            <option>Pending</option>
+                            <option>Cancelled</option>
+
+                        </select>
+
+                    </div>
+
+                </div>
+
+                <hr />
+
+                <button type="submit" class="btn btn-primary">
+
+                    <i class="bi bi-check-circle-fill"></i>
+                    Save Changes
+
+                </button>
+
+                <a asp-action="Details" asp-route-id="@Model.Id" class="btn btn-outline-primary">
+
+                    <i class="bi bi-eye-fill"></i>
+                    View
+
+                </a>
+
+                <a asp-action="Index" class="btn btn-outline-secondary">
+
+                    <i class="bi bi-arrow-left-circle-fill"></i>
+                    Back
+
+                </a>
+
+            </form>
+
+        </div>
+
+    </div>
+
+</div>
+
+@section Scripts
+{
+    <partial name="_ValidationScriptsPartial" />
+}

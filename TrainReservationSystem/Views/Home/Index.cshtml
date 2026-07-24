@@ -1,0 +1,976 @@
+﻿<style>
+    html {
+        scroll-behavior: smooth;
+    }
+
+    body {
+        background: #f5f7fb;
+    }
+
+
+    /* HERO */
+
+    .hero-section {
+
+        height: 100vh;
+        min-height: 650px;
+        position: relative;
+        overflow: hidden;
+
+        background: url("/images/Hero.jpg") center/cover no-repeat;
+
+    }
+
+
+    .hero-overlay {
+
+        position: absolute;
+        inset: 0;
+
+        background:
+            linear-gradient(90deg,
+                rgba(0, 0, 0, .85),
+                rgba(0, 0, 0, .35));
+
+        z-index: 1;
+
+    }
+
+
+
+    .hero-content {
+
+        position: relative;
+        z-index: 2;
+
+        height: 100%;
+
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+
+        color: white;
+
+        max-width: 850px;
+
+    }
+
+
+
+    .hero-content h1 {
+
+        font-size: 4.5rem;
+        font-weight: 800;
+
+        animation: slideUp 1s ease;
+
+    }
+
+    .hero-subtitle {
+
+        font-size: 1.4rem;
+
+        font-weight: 600;
+
+        letter-spacing: 1px;
+
+        color: #ffc107;
+
+        text-transform: uppercase;
+
+        animation: fadeIn 1s ease;
+
+    }
+
+    .hero-content p {
+
+        font-size: 1.3rem;
+
+        animation: fadeIn 1.5s ease;
+
+    }
+
+
+
+    /* BUTTON */
+
+    .hero-btn {
+
+        position: relative;
+        overflow: hidden;
+
+        border-radius: 50px;
+
+        font-size: 18px;
+        font-weight: 600;
+
+        transition: .35s;
+
+    }
+
+
+    .hero-btn:hover {
+
+        transform: translateY(-5px);
+
+        box-shadow:
+            0 15px 35px rgba(0, 0, 0, .3);
+
+    }
+
+
+    .hero-btn::before {
+
+        content: "";
+
+        position: absolute;
+
+        top: 0;
+
+        left: -100%;
+
+        width: 60%;
+
+        height: 100%;
+
+        background: rgba(255, 255, 255, .4);
+
+        transform: skewX(-25deg);
+
+    }
+
+
+
+    .hero-btn:hover::before {
+
+        animation: shine .8s;
+
+    }
+
+
+
+
+    @@keyframes shine {
+
+        from {
+            left: -100%;
+        }
+
+        to {
+            left: 160%;
+        }
+
+    }
+
+
+
+
+    /* CARDS */
+
+
+    .feature-card,
+    .stats-card {
+
+        border: none;
+
+        border-radius: 25px;
+
+        overflow: hidden;
+
+        transition: .4s;
+
+        background: white;
+
+    }
+
+
+
+    .feature-card:hover,
+    .stats-card:hover {
+
+        transform: translateY(-12px);
+
+        box-shadow:
+            0 20px 40px rgba(0, 0, 0, .15);
+
+    }
+
+
+
+
+
+    .icon-circle {
+
+        width: 85px;
+        height: 85px;
+
+        border-radius: 50%;
+
+        display: flex;
+
+        align-items: center;
+        justify-content: center;
+
+        margin: auto;
+
+        font-size: 40px;
+
+        color: white;
+
+        background:
+            linear-gradient(135deg,
+                #0d6efd,
+                #00c6ff);
+
+    }
+
+
+    .card-img-top-custom {
+        width: 100%;
+        height: 180px;
+        object-fit: cover;
+        border-radius: 25px 25px 0 0;
+        transition: .4s;
+    }
+
+    .feature-card:hover .card-img-top-custom,
+    .stats-card:hover .card-img-top-custom {
+        transform: scale(1.05);
+    }
+
+    .card-image-wrapper {
+        overflow: hidden;
+        border-radius: 25px 25px 0 0;
+    }
+
+    /* IMAGE */
+
+    .train-image {
+
+        border-radius: 25px;
+
+        transition: .4s;
+
+    }
+
+
+    .train-image:hover {
+
+        transform: scale(1.05);
+
+    }
+
+    /* SCROLL */
+
+    .scroll-down {
+
+        position: absolute;
+
+        bottom: 35px;
+
+        left: 50%;
+
+        transform: translateX(-50%);
+
+        z-index: 3;
+
+        cursor: pointer;
+
+    }
+
+    .scroll-down span {
+
+        display: block;
+
+        width: 25px;
+
+        height: 25px;
+
+        border-right: 3px solid white;
+
+        border-bottom: 3px solid white;
+
+        transform: rotate(45deg);
+
+        animation: down 2s infinite;
+
+    }
+
+    .scroll-down:hover span {
+
+        border-color: #FFC107;
+
+    }
+
+    @@keyframes down {
+
+        0% {
+
+            opacity: 0;
+
+            transform: rotate(45deg) translate(-10px, -10px);
+
+        }
+
+        50% {
+
+            opacity: 1;
+
+        }
+
+        100% {
+
+            opacity: 0;
+
+            transform: rotate(45deg) translate(10px, 10px);
+
+        }
+
+    }
+
+    @@keyframes slideUp {
+
+        from {
+
+            opacity: 0;
+
+            transform: translateY(60px);
+
+        }
+
+        to {
+
+            opacity: 1;
+
+            transform: translateY(0);
+
+        }
+
+    }
+
+
+
+    @@keyframes fadeIn {
+
+        from {
+
+            opacity: 0;
+
+        }
+
+        to {
+
+            opacity: 1;
+
+        }
+
+    }
+
+    /* ===========================
+        GLOBAL FONT STYLE
+   =========================== */
+
+    body {
+
+        font-family: 'Segoe UI', 'Roboto', sans-serif;
+
+    }
+
+
+    h1,
+    h2,
+    h3,
+    h4,
+    h5 {
+
+        font-weight: 700;
+
+        color: #263238;
+
+    }
+
+    .hero-content h1,
+    .hero-content h2,
+    .hero-content h3,
+    .hero-content h4,
+    .hero-content h5 {
+
+        color: #ffffff;
+
+    }
+
+    .hero-content p {
+
+        color: rgba(255, 255, 255, .92);
+
+    }
+
+    p {
+
+        color: #607D8B;
+
+        line-height: 1.7;
+
+    }
+
+
+    /* ===========================
+        SECTION TITLE
+   =========================== */
+
+    .section-title {
+
+        font-size: 2.5rem;
+
+        font-weight: 800;
+
+        color: #0B3D91;
+
+        position: relative;
+
+    }
+
+
+    .section-title::after {
+
+        content: "";
+
+        width: 70px;
+
+        height: 4px;
+
+        background: #FFC107;
+
+        display: block;
+
+        margin: 15px auto;
+
+        border-radius: 20px;
+
+    }
+
+
+
+    /* ===========================
+        QUICK ACCESS CARDS
+   =========================== */
+
+
+    .feature-card,
+    .stats-card {
+
+        border: none;
+
+        border-radius: 25px;
+
+        background: white;
+
+        transition: .35s ease;
+
+        box-shadow: 0 8px 25px rgba(11, 61, 145, .08);
+
+    }
+
+
+    .feature-card:hover,
+    .stats-card:hover {
+
+        transform: translateY(-12px);
+
+        box-shadow: 0 20px 45px rgba(11, 61, 145, .18);
+
+    }
+
+
+
+    /* CARD TITLES */
+
+    .feature-card h4,
+    .stats-card h4 {
+
+        color: #0B3D91;
+
+        font-weight: 700;
+
+    }
+
+
+
+    /* ICON */
+
+    .icon-circle {
+
+        width: 85px;
+
+        height: 85px;
+
+        border-radius: 50%;
+
+        display: flex;
+
+        align-items: center;
+
+        justify-content: center;
+
+        margin: auto;
+
+        font-size: 40px;
+
+        color: white;
+
+        background:
+
+            linear-gradient(135deg, #0B3D91, #1E88E5);
+
+        box-shadow:
+
+            0 10px 25px rgba(30, 136, 229, .35);
+
+    }
+
+
+
+    /* ===========================
+        COMMON BUTTON STYLE
+   =========================== */
+
+
+    .system-btn {
+
+        width: 180px;
+        height: 50px;
+
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        align-self: center;
+
+        margin-top: auto;
+
+        border: none;
+        border-radius: 50px;
+
+        background: #0B3D91;
+        color: #fff !important;
+
+        font-weight: 600;
+        font-size: 15px;
+        text-decoration: none;
+
+        transition: .3s ease;
+    }
+
+    .system-btn:hover {
+
+        background: #1E88E5;
+        color: #fff !important;
+
+        transform: translateY(-3px);
+
+        box-shadow: 0 10px 20px rgba(30, 136, 229, .30);
+
+    }
+
+
+    /* GOLD BUTTON */
+
+    .gold-btn {
+
+        background: #FFC107;
+
+        color: #0B3D91;
+
+    }
+
+
+    .gold-btn:hover {
+
+        background: #FFD54F;
+
+        color: #0B3D91;
+
+    }
+
+
+    /* AI BUTTON */
+
+    .ai-card-btn {
+
+        background: #1E88E5;
+
+       
+
+    }
+
+
+    .ai-card-btn:hover {
+
+        background: #0B3D91;
+
+    }
+
+
+
+    /* REPORT BUTTON */
+
+    .report-btn {
+
+        background: #0B3D91;
+
+       
+
+    }
+
+    .report-btn:hover {
+
+        background: #082C6C;
+
+    }
+
+    .feature-card .card-body,
+    .stats-card .card-body {
+
+        display: flex;
+
+        flex-direction: column;
+
+        height: 100%;
+
+    }
+
+    .feature-card p,
+    .stats-card p {
+
+        flex-grow: 1;
+
+    }
+</style>
+
+
+
+@{
+    ViewData["Title"] = "Home";
+}
+
+
+
+<!-- HERO -->
+
+<div class="hero-section">
+
+
+    <div class="hero-overlay"></div>
+
+
+    <div class="container h-100">
+
+
+        <div class="hero-content">
+
+
+            <h3 class="hero-subtitle mb-4">
+                Train Reservation System
+            </h3>
+
+            <h1>
+
+                Book Your Journey
+                <br>
+                With Confidence
+
+            </h1>
+
+
+
+            <p class="lead mt-4">
+
+                Experience a modern railway reservation platform with easy booking,
+                seat availability tracking, schedule management, weekly reports,
+                special requests and AI-powered booking assistance.
+
+            </p>
+
+
+
+
+            <div class="mt-4 d-flex flex-wrap gap-3">
+
+
+                <a asp-controller="Booking" asp-action="Index" class="btn btn-warning btn-lg hero-btn px-5">
+
+                    Book Tickets
+
+                </a>
+
+
+
+                <a asp-controller="Chatbot" asp-action="Index" class="btn btn-outline-light btn-lg hero-btn px-5">
+
+                    AI Assistant
+
+                </a>
+
+
+
+            </div>
+
+
+        </div>
+
+
+    </div>
+
+    <a href="#quick-access" class="scroll-down">
+
+        <span></span>
+
+    </a>
+
+</div>
+
+<div id="quick-access" class="container py-5">
+
+    <h2 class="text-center mb-5 section-title">
+        Quick Access
+    </h2>
+
+
+    <div class="row g-4">
+
+
+
+        <div class="col-md-4">
+
+            <div class="card feature-card h-100">
+
+
+                <img src="~/images/booking.jpg" asp-append-version="true" class="card-image" alt="Bookings">
+
+                <div class="card-body text-center p-4 d-flex flex-column">
+
+                    <h4>Bookings</h4>
+
+                    <p>
+                        Create, update and manage passenger reservations.
+                    </p>
+
+                    <a asp-controller="Booking" asp-action="Index" class="system-btn">
+                        Open
+                    </a>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+
+
+
+        <div class="col-md-4">
+
+            <div class="card feature-card h-100">
+
+
+                <img src="~/images/schedule.jpg" asp-append-version="true" class="card-image" alt="Schedules">
+
+                <div class="card-body text-center p-4 d-flex flex-column">
+
+                    <h4>Schedules</h4>
+
+                    <p>
+                        Manage train schedules and seat capacities.
+                    </p>
+
+                    <a asp-controller="Schedule" asp-action="Index" class="system-btn">
+                        Open
+                    </a>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+
+
+
+
+        <div class="col-md-4">
+
+            <div class="card feature-card h-100">
+
+
+                <img src="~/images/request.jpg" asp-append-version="true" class="card-image" alt="Special Requests">
+
+                <div class="card-body text-center p-4 d-flex flex-column">
+
+                    <h4>Special Requests</h4>
+
+                    <p>
+                        Manage passenger special requirements.
+                    </p>
+
+                    <a asp-controller="SpecialRequest" asp-action="Index" class="system-btn">
+                        Open
+                    </a>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="col-md-4">
+
+            <div class="card feature-card h-100">
+
+                <img src="~/images/reports.jpg" asp-append-version="true" class="card-image" alt="Reports">
+
+                <div class="card-body text-center p-4 d-flex flex-column">
+
+                    <h4>Weekly Reports</h4>
+
+                    <p>
+                        Booking analytics, revenue and request summaries.
+                    </p>
+
+                    <a asp-controller="Report" asp-action="WeeklyBookings" class="system-btn">
+                        Open
+                    </a>
+
+                </div>
+
+                
+            </div>
+
+        </div>
+
+
+        <div class="col-md-4">
+
+            <div class="card feature-card h-100">
+
+                <img src="~/images/ai.jpg" asp-append-version="true" class="card-image" alt="AI Assistant">
+
+                <div class="card-body text-center p-4 d-flex flex-column">
+
+                    <h4>AI Assistant</h4>
+
+                    <p>
+                        Check availability and receive booking recommendations.
+                    </p>
+
+                    <a asp-controller="Chatbot" asp-action="Index" class="system-btn">
+                        Open
+                    </a>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+
+    </div>
+
+
+
+
+
+
+
+
+</div>
+
+<section class="py-5">
+
+    <div class="container">
+
+        <h2 class="text-center section-title mb-5">
+            Why Choose Our Train Reservation System?
+        </h2>
+
+        <div class="row g-4">
+
+            <div class="col-lg-3 col-md-6">
+
+                <div class="feature-info-card text-center h-100">
+
+                    <div class="feature-icon">
+                        🚆
+                    </div>
+
+                    <h4>Easy Booking</h4>
+
+                    <p>
+                        Reserve train tickets quickly with a simple and user-friendly booking process.
+                    </p>
+
+                </div>
+
+            </div>
+
+            <div class="col-lg-3 col-md-6">
+
+                <div class="feature-info-card text-center h-100">
+
+                    <div class="feature-icon">
+                        💺
+                    </div>
+
+                    <h4>Seat Availability</h4>
+
+                    <p>
+                        Track available seats in real time using train capacity and booking information.
+                    </p>
+
+                </div>
+
+            </div>
+
+            <div class="col-lg-3 col-md-6">
+
+                <div class="feature-info-card text-center h-100">
+
+                    <div class="feature-icon">
+                        📊
+                    </div>
+
+                    <h4>Weekly Reports</h4>
+
+                    <p>
+                        View booking summaries, revenue statistics and special request analytics.
+                    </p>
+
+                </div>
+
+            </div>
+
+            <div class="col-lg-3 col-md-6">
+
+                <div class="feature-info-card text-center h-100">
+
+                    <div class="feature-icon">
+                        🤖
+                    </div>
+
+                    <h4>AI Assistant</h4>
+
+                    <p>
+                        Receive intelligent booking recommendations and seat availability predictions.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>

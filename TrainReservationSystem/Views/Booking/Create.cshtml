@@ -1,0 +1,53 @@
+@model TrainReservationSystem.Models.Booking
+
+@{
+    ViewData["Title"] = "Create Booking";
+}
+
+<div class="container mt-4">
+
+    <div class="page-card">
+
+        <div class="page-header">
+
+            <h3>Create Booking</h3>
+
+            <p class="mb-0">
+                Enter your train reservation details.
+            </p>
+
+        </div>
+
+        <div class="card-body">
+
+            <form asp-action="Create" method="post">
+
+                <partial name="_BookingForm" />
+
+                <hr />
+
+                <button type="submit" class="btn btn-primary px-4">
+
+                    Save Booking
+
+                </button>
+
+                <a asp-action="Index" class="btn btn-outline-secondary px-4">
+
+                    Cancel
+
+                </a>
+
+            </form>
+
+        </div>
+
+    </div>
+
+</div>
+
+@section Scripts {
+
+    <partial name="_ValidationScriptsPartial" />
+
+}

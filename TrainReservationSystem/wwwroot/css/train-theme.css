@@ -1,0 +1,94 @@
+body {
+  background: #f5f7fb;
+  font-family: "Segoe UI", sans-serif;
+}
+
+.page-card {
+  border: none;
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 10px 30px rgba(11, 61, 145, 0.12);
+}
+
+.page-header {
+  background: linear-gradient(135deg, #0b3d91, #1e88e5);
+  color: white;
+  padding: 25px 30px;
+}
+
+.page-header h2,
+.page-header h3 {
+  color: white;
+  margin-bottom: 5px;
+}
+
+.form-control,
+.form-select {
+  border-radius: 10px;
+  border: 1px solid #d7e3f3;
+}
+
+.form-control:focus,
+.form-select:focus {
+  border-color: #1e88e5;
+  box-shadow: 0 0 0 0.2rem rgba(30, 136, 229, 0.2);
+}
+
+.form-label {
+  font-weight: 600;
+  color: #0b3d91;
+}
+
+.btn-primary {
+  background: #0b3d91;
+  border: none;
+}
+
+.btn-primary:hover {
+  background: #1e88e5;
+}
+
+.btn-success {
+  background: #198754;
+}
+
+.btn-secondary {
+  background: #6c757d;
+}
+
+.table thead {
+  background: #0b3d91;
+  color: white;
+}
+
+.table thead th {
+  color: white;
+}
+
+.badge {
+  padding: 8px 12px;
+  font-size: 0.85rem;
+}
+
+.details-table th {
+  width: 240px;
+  background: #edf4ff;
+  color: #0b3d91;
+}
+
+.delete-box {
+  border-left: 6px solid #dc3545;
+  border-radius: 15px;
+}
+
+.table-theme thead {
+  background: #0b3d91;
+  color: #fff;
+}
+
+.table-theme thead th {
+  background: #0b3d91 !important;
+  color: #fff !important;
+  border-color: #0b3d91;
+  vertical-align: middle;
+}

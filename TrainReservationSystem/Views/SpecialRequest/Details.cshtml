@@ -1,0 +1,197 @@
+@model TrainReservationSystem.Models.SpecialRequest
+
+@{
+    ViewData["Title"] = "Special Request Details";
+}
+
+
+
+<div class="container mt-4">
+
+
+    <div class="page-card">
+
+
+
+        <div class="page-header">
+
+
+            <h3>
+                Special Request Details
+            </h3>
+
+
+        </div>
+
+
+
+
+        <div class="card-body">
+
+
+
+            <table class="table table-bordered details-table">
+
+
+                <tr>
+
+                    <th width="250">
+                        Request ID
+                    </th>
+
+                    <td>
+                        @Model.Id
+                    </td>
+
+                </tr>
+
+
+
+                <tr>
+
+                    <th>
+                        Booking ID
+                    </th>
+
+                    <td>
+                        @Model.BookingId
+                    </td>
+
+                </tr>
+
+
+
+
+                <tr>
+
+                    <th>
+                        Request Type
+                    </th>
+
+                    <td>
+                        @Model.RequestType
+                    </td>
+
+                </tr>
+
+
+
+
+                <tr>
+
+                    <th>
+                        Description
+                    </th>
+
+                    <td>
+                        @Model.Description
+                    </td>
+
+                </tr>
+
+
+
+
+                <tr>
+
+                    <th>
+                        Request Date
+                    </th>
+
+                    <td>
+
+                        @Model.RequestDate.ToString("dd MMMM yyyy")
+
+                    </td>
+
+                </tr>
+
+
+
+
+                <tr>
+
+                    <th>
+                        Status
+                    </th>
+
+
+                    <td>
+
+
+                        @if(Model.Status == "Approved")
+                        {
+
+                            <span class="badge bg-success">
+
+                                Approved
+
+                            </span>
+
+                        }
+                        else if(Model.Status == "Rejected")
+                        {
+
+                            <span class="badge bg-danger">
+
+                                Rejected
+
+                            </span>
+
+                        }
+                        else
+                        {
+
+                            <span class="badge bg-warning text-dark">
+
+                                Pending
+
+                            </span>
+
+                        }
+
+
+                    </td>
+
+
+                </tr>
+
+
+
+            </table>
+
+
+
+
+            <a asp-action="Edit"
+               asp-route-id="@Model.Id"
+               class="btn btn-primary">
+
+
+                <i class="bi bi-pencil-square"></i>
+
+                Edit
+
+
+            </a>
+
+
+
+            <a asp-action="Index"
+               class="btn btn-outline-secondary">
+
+
+                Back
+
+
+            </a>
+
+
+
+        </div>
+
+
+    </div>
+
+
+</div>

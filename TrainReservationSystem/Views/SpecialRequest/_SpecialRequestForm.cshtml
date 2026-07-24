@@ -1,0 +1,128 @@
+@model TrainReservationSystem.Models.SpecialRequest
+
+
+<div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
+
+
+<div class="row">
+
+    <div class="col-md-6 mb-3">
+
+        <label asp-for="BookingId" class="form-label fw-semibold"></label>
+
+        <select asp-for="BookingId" class="form-select">
+
+            <option value="">-- Select Booking --</option>
+
+            @foreach (var booking in ViewBag.Bookings)
+            {
+                <option value="@booking.Id">
+
+                    Booking #@booking.Id -
+                    @booking.TrainName
+                    (@booking.FromStation → @booking.ToStation)
+
+                </option>
+            }
+
+        </select>
+
+        <span asp-validation-for="BookingId" class="text-danger"></span>
+
+    </div>
+
+
+    <div class="col-md-6 mb-3">
+
+        <label asp-for="RequestType" class="form-label fw-semibold"></label>
+
+        <select asp-for="RequestType" class="form-select">
+
+            <option value="">-- Select Request Type --</option>
+
+            <option>Wheelchair Assistance</option>
+            <option>Medical Assistance</option>
+            <option>Priority Boarding</option>
+            <option>Seat Change</option>
+            <option>Extra Luggage</option>
+            <option>Meal Preference</option>
+            <option>Child Assistance</option>
+            <option>Senior Citizen Assistance</option>
+            <option>Other</option>
+
+        </select>
+
+        <span asp-validation-for="RequestType" class="text-danger"></span>
+
+    </div>
+
+</div>
+
+
+
+<div class="row">
+
+
+    <div class="col-md-6 mb-3">
+
+        <label asp-for="RequestDate" class="form-label fw-semibold"></label>
+
+        <input asp-for="RequestDate"
+               type="date"
+               class="form-control" />
+
+        <span asp-validation-for="RequestDate"
+              class="text-danger"></span>
+
+    </div>
+
+
+
+    <div class="col-md-6 mb-3">
+
+        <label asp-for="Status" class="form-label fw-semibold"></label>
+
+
+        <select asp-for="Status" class="form-select">
+
+            <option>Pending</option>
+            <option>Approved</option>
+            <option>Rejected</option>
+
+        </select>
+
+
+        <span asp-validation-for="Status"
+              class="text-danger"></span>
+
+
+    </div>
+
+
+</div>
+
+
+
+<div class="mb-3">
+
+    <label asp-for="Description"
+           class="form-label fw-semibold"></label>
+
+
+    <textarea asp-for="Description"
+              class="form-control"
+              rows="4"
+              maxlength="300"
+              placeholder="Enter passenger special request...">
+    </textarea>
+
+
+    <small class="text-muted">
+        Maximum 300 characters.
+    </small>
+
+
+    <span asp-validation-for="Description"
+          class="text-danger"></span>
+
+</div>

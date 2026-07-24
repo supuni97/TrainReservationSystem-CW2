@@ -1,0 +1,83 @@
+@model TrainReservationSystem.Models.SpecialRequest
+
+@{
+    ViewData["Title"] = "Create Special Request";
+}
+
+
+<div class="container mt-4">
+
+
+    <div class="page-card">
+
+
+        <div class="page-header">
+
+
+            <h3>
+                Create Special Request
+            </h3>
+
+
+            <p class="mb-0">
+
+                Enter passenger special request details.
+
+            </p>
+
+
+        </div>
+
+
+
+        <div class="card-body">
+
+
+            <form asp-action="Create" method="post">
+
+
+                <partial name="_SpecialRequestForm" />
+
+
+                <hr />
+
+
+
+                
+<button type="submit" class="btn btn-primary">
+
+    <i class="bi bi-check-circle-fill"></i>
+
+    Save Request
+
+</button>
+
+
+<a asp-action="Index" class="btn btn-outline-secondary">
+
+    <i class="bi bi-arrow-left-circle-fill"></i>
+
+    Cancel
+
+</a>
+
+
+            </form>
+
+
+
+        </div>
+
+
+    </div>
+
+
+</div>
+
+
+
+@section Scripts {
+
+    <partial name="_ValidationScriptsPartial" />
+
+}

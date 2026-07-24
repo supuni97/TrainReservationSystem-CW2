@@ -1,0 +1,1845 @@
+@model TrainReservationSystem.Models.ViewModels.WeeklyReportViewModel
+
+@{
+    ViewData["Title"] = "Weekly Bookings Report";
+}
+
+
+<style>
+
+body{
+    background:#f4f7fc;
+}
+
+
+/* Dashboard Header */
+
+.dashboard-header{
+
+    background:linear-gradient(135deg,#0B3D91,#1565C0);
+
+    color:white;
+
+    border-radius:20px;
+
+    padding:35px;
+
+    margin-bottom:30px;
+
+    box-shadow:0 12px 30px rgba(0,0,0,.15);
+
+}
+
+
+.dashboard-header h2{
+
+    font-weight:700;
+
+}
+
+
+.dashboard-header p{
+
+    opacity:.9;
+
+}
+
+
+/* Cards */
+
+.dashboard-card{
+
+    border:none;
+
+    border-radius:18px;
+
+    background:white;
+
+    box-shadow:0 8px 25px rgba(0,0,0,.08);
+
+    transition:.25s;
+
+    height:100%;
+
+}
+
+
+.dashboard-card:hover{
+
+    transform:translateY(-5px);
+
+    box-shadow:0 15px 35px rgba(0,0,0,.12);
+
+}
+
+
+.dashboard-icon{
+
+    width:65px;
+
+    height:65px;
+
+    border-radius:18px;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    color:white;
+
+    font-size:28px;
+
+}
+
+
+
+.metric-title{
+
+    font-size:.85rem;
+
+    text-transform:uppercase;
+
+    color:#6c757d;
+
+    font-weight:700;
+
+}
+
+
+.metric-value{
+
+    font-size:2.2rem;
+
+    font-weight:700;
+
+    color:#1b263b;
+
+}
+
+
+
+.section-title{
+
+    color:#0B3D91;
+
+    font-weight:700;
+
+    margin:35px 0 20px;
+
+}
+
+/* Daily Report Table Headers */
+
+.table thead th {
+    background:#e9ecef;
+    color:#343a40;
+    font-weight:700;
+    border-bottom:2px solid #ced4da;
+    text-transform:uppercase;
+    font-size:.85rem;
+    letter-spacing:.3px;
+}
+
+</style>
+
+
+
+<div class="container-fluid py-4">
+
+
+<!-- Dashboard Header -->
+
+<div class="dashboard-header">
+
+
+<div class="row align-items-center">
+
+
+<div class="col-lg-8">
+
+
+<h2>
+
+<i class="bi bi-bar-chart-line-fill me-2"></i>
+
+Weekly Train Reservation Dashboard
+
+</h2>
+
+
+<p>
+
+Professional analytics dashboard showing weekly booking performance,
+passenger demand and operational insights.
+
+</p>
+
+
+</div>
+
+
+
+<div class="col-lg-4 text-lg-end">
+
+
+<h5>
+
+@Model.WeekStartDate.ToString("dd MMM yyyy")
+
+-
+
+@Model.WeekEndDate.ToString("dd MMM yyyy")
+
+</h5>
+
+
+<small>
+
+Generated :
+
+@Model.GeneratedOn.ToString("dd MMM yyyy HH:mm")
+
+</small>
+
+
+</div>
+
+
+</div>
+
+
+</div>
+
+
+
+
+
+<!-- Toolbar -->
+
+
+<div class="card dashboard-card mb-4">
+
+
+<div class="card-body">
+
+
+<h5 class="fw-bold mb-3">
+
+Generate Weekly Report
+
+</h5>
+
+
+
+<form asp-action="WeeklyBookings" method="get">
+
+
+<div class="row align-items-end g-3">
+
+
+
+<div class="col-md-4">
+
+
+<label class="form-label fw-semibold">
+
+Select Date
+
+</label>
+
+
+
+<input type="date"
+       name="selectedDate"
+       class="form-control"
+       value="@Model.WeekStartDate.ToString("yyyy-MM-dd")" />
+
+
+</div>
+
+
+
+
+
+<div class="col-md-3">
+
+
+<button type="submit"
+        class="btn btn-primary w-100">
+
+
+<i class="bi bi-search me-2"></i>
+
+Generate Report
+
+
+</button>
+
+
+</div>
+
+
+
+<div class="col-md-5">
+
+    <div class="btn-group w-100 mb-2">
+
+        <a asp-action="WeeklyBookings"
+           class="btn btn-outline-primary">
+
+            <i class="bi bi-calendar-week me-1"></i>
+            Current Week
+
+        </a>
+
+
+        <a asp-action="WeeklyBookings"
+           asp-route-selectedDate="@Model.WeekStartDate.AddDays(-7).ToString("yyyy-MM-dd")"
+           class="btn btn-outline-primary">
+
+            <i class="bi bi-arrow-left me-1"></i>
+            Previous
+
+        </a>
+
+
+        <a asp-action="WeeklyBookings"
+           asp-route-selectedDate="@Model.WeekStartDate.AddDays(7).ToString("yyyy-MM-dd")"
+           class="btn btn-outline-primary">
+
+            <i class="bi bi-arrow-right me-1"></i>
+            Next
+
+        </a>
+
+    </div>
+
+
+    <div class="d-flex gap-2">
+
+
+        <!-- Export CSV -->
+
+        <a asp-action="ExportCsv"
+           asp-route-selectedDate="@Model.WeekStartDate.ToString("yyyy-MM-dd")"
+           class="btn btn-success flex-fill">
+
+            <i class="bi bi-file-earmark-excel-fill me-1"></i>
+
+            Export CSV
+
+        </a>
+
+        <!-- Weekly Summary Print -->
+
+        <button class="btn btn-outline-secondary flex-fill"
+                onclick="printSection('weeklySummary')">
+
+            <i class="bi bi-printer me-1"></i>
+
+            Export PDF
+
+        </button>
+
+
+    </div>
+
+
+</div>
+
+
+</div>
+
+
+</form>
+
+
+</div>
+
+
+</div>
+
+
+
+
+
+<div id="fullReport">
+
+
+<div id="weeklySummary">
+
+
+@if(Model.TotalBookings == 0 && Model.TotalSpecialRequests == 0)
+{
+
+<div class="alert alert-warning shadow-sm">
+
+<i class="bi bi-exclamation-triangle me-2"></i>
+
+No bookings or special requests found for the selected week.
+
+</div>
+
+}
+
+
+
+<!-- Executive KPI Cards -->
+
+
+<div class="row g-4 mb-5">
+
+
+
+<!-- Total Bookings -->
+
+
+<div class="col-xl-4 col-md-6">
+
+
+<div class="card dashboard-card">
+
+
+<div class="card-body">
+
+
+<div class="d-flex justify-content-between align-items-center">
+
+
+<div>
+
+
+<div class="metric-title">
+
+Total Bookings
+
+</div>
+
+
+<div class="metric-value">
+
+@Model.TotalBookings
+
+</div>
+
+
+<small class="text-success">
+
+Weekly Reservations
+
+</small>
+
+
+</div>
+
+
+
+<div class="dashboard-icon bg-primary">
+
+<i class="bi bi-ticket-perforated-fill"></i>
+
+</div>
+
+
+
+</div>
+
+
+</div>
+
+
+</div>
+
+
+</div>
+
+
+
+
+
+
+<!-- Special Requests -->
+
+
+<div class="col-xl-4 col-md-6">
+
+
+<div class="card dashboard-card">
+
+
+<div class="card-body">
+
+
+<div class="d-flex justify-content-between align-items-center">
+
+
+<div>
+
+
+<div class="metric-title">
+
+Special Requests
+
+</div>
+
+
+<div class="metric-value">
+
+@Model.TotalSpecialRequests
+
+</div>
+
+
+<small class="text-warning">
+
+Passenger Assistance
+
+</small>
+
+
+</div>
+
+
+
+<div class="dashboard-icon bg-warning">
+
+<i class="bi bi-person-heart"></i>
+
+</div>
+
+
+
+</div>
+
+
+</div>
+
+
+</div>
+
+
+</div>
+
+
+
+
+
+
+<!-- Revenue -->
+
+
+<div class="col-xl-4 col-md-6">
+
+
+<div class="card dashboard-card">
+
+
+<div class="card-body">
+
+
+<div class="d-flex justify-content-between align-items-center">
+
+
+<div>
+
+
+<div class="metric-title">
+
+Total Revenue
+
+</div>
+
+
+<div class="metric-value">
+
+Rs @Model.TotalRevenue.ToString("N0")
+
+</div>
+
+
+<small class="text-success">
+
+Weekly Income
+
+</small>
+
+
+</div>
+
+
+
+<div class="dashboard-icon bg-success">
+
+<i class="bi bi-cash-stack"></i>
+
+</div>
+
+
+
+</div>
+
+
+</div>
+
+
+</div>
+
+
+</div>
+
+
+
+</div>
+<!-- =========================
+     Weekly Analytics Charts
+========================= -->
+
+<h3 class="section-title">
+
+<i class="bi bi-graph-up-arrow me-2"></i>
+
+Weekly Analytics
+
+</h3>
+
+
+<div class="row g-4 mb-5">
+
+
+    <!-- Booking Chart -->
+
+    <div class="col-lg-6">
+
+
+        <div class="card dashboard-card">
+
+
+            <div class="card-body">
+
+
+                <h5 class="text-center fw-bold text-primary mb-4">
+
+                    Weekly Booking Trend
+
+                </h5>
+
+
+                <div style="height:320px">
+
+                    <canvas id="bookingChart"></canvas>
+
+                </div>
+
+
+            </div>
+
+
+        </div>
+
+
+    </div>
+
+
+
+
+    <!-- Special Request Chart -->
+
+
+    <div class="col-lg-6">
+
+
+        <div class="card dashboard-card">
+
+
+            <div class="card-body">
+
+
+                <h5 class="text-center fw-bold text-success mb-4">
+
+                    Weekly Special Request Trend
+
+                </h5>
+
+
+                <div style="height:320px">
+
+                    <canvas id="requestChart"></canvas>
+
+                </div>
+
+
+            </div>
+
+
+        </div>
+
+
+    </div>
+
+
+</div>
+<!-- =========================
+     Daily Report
+========================= -->
+
+
+<div id="dailySection">
+
+
+<hr class="my-5">
+
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+
+
+<div>
+
+<h2 class="section-title mb-1">
+
+<i class="bi bi-calendar-week me-2"></i>
+
+Daily Report
+
+</h2>
+
+
+<p class="text-muted">
+
+Daily booking details and passenger special requests.
+
+</p>
+
+
+</div>
+
+
+
+<button class="btn btn-outline-dark"
+
+onclick="printSection('dailySection')">
+
+
+<i class="bi bi-printer-fill me-2"></i>
+
+Print Daily Report
+
+
+</button>
+
+
+</div>
+
+
+
+
+
+@foreach(var day in Model.Days)
+{
+
+
+<div class="card dashboard-card mb-4">
+
+
+<div class="card-header bg-primary text-white">
+
+
+<h5 class="mb-0">
+
+
+<i class="bi bi-calendar-event me-2"></i>
+
+
+@day.DayName
+
+-
+
+@day.Date.ToString("dd MMM yyyy")
+
+
+</h5>
+
+
+</div>
+
+
+
+
+<div class="card-body">
+
+
+
+
+
+<!-- BOOKINGS -->
+
+
+<h5 class="fw-bold text-primary mb-3">
+
+<i class="bi bi-ticket-perforated me-2"></i>
+
+Bookings
+
+</h5>
+
+
+
+
+@if(day.Bookings.Any())
+{
+
+
+<div class="table-responsive">
+
+
+<table class="table table-hover align-middle">
+
+
+<thead>
+
+
+<tr>
+
+<th>ID</th>
+
+<th>Train</th>
+
+<th>From</th>
+
+<th>To</th>
+
+<th>Departure</th>
+
+<th>Seat</th>
+
+<th>Price</th>
+
+<th>Status</th>
+
+
+</tr>
+
+
+</thead>
+
+
+
+
+<tbody>
+
+
+
+@foreach(var booking in day.Bookings)
+{
+
+
+<tr>
+
+
+<td>
+
+@booking.Id
+
+</td>
+
+
+<td class="fw-semibold">
+
+@booking.TrainName
+
+</td>
+
+
+<td>
+
+@booking.FromStation
+
+</td>
+
+
+<td>
+
+@booking.ToStation
+
+</td>
+
+
+<td>
+
+@booking.DepartureTime
+
+</td>
+
+
+<td>
+
+<span class="badge bg-light text-dark">
+
+@booking.SeatNumber
+
+</span>
+
+</td>
+
+
+<td>
+
+Rs @booking.TicketPrice.ToString("N2")
+
+</td>
+
+
+
+<td>
+
+
+@if(booking.Status=="Confirmed")
+{
+
+<span class="badge bg-success">
+
+Confirmed
+
+</span>
+
+}
+
+else if(booking.Status=="Pending")
+{
+
+<span class="badge bg-warning text-dark">
+
+Pending
+
+</span>
+
+}
+
+else if(booking.Status=="Cancelled")
+{
+
+<span class="badge bg-danger">
+
+Cancelled
+
+</span>
+
+}
+
+else
+{
+
+<span class="badge bg-secondary">
+
+@booking.Status
+
+</span>
+
+}
+
+
+</td>
+
+
+
+</tr>
+
+
+}
+
+
+
+</tbody>
+
+
+</table>
+
+
+</div>
+
+
+}
+
+else
+{
+
+
+<div class="alert alert-light">
+
+<i class="bi bi-info-circle me-2"></i>
+
+No bookings for this day.
+
+</div>
+
+
+}
+
+
+
+
+
+
+
+
+<hr class="my-4">
+
+
+
+
+
+
+<!-- SPECIAL REQUESTS -->
+
+
+<h5 class="fw-bold text-success mb-3">
+
+<i class="bi bi-person-heart me-2"></i>
+
+Special Requests
+
+</h5>
+
+
+
+
+
+
+@if(day.SpecialRequests.Any())
+{
+
+
+<div class="table-responsive">
+
+
+<table class="table table-hover align-middle">
+
+
+<thead>
+
+
+<tr>
+
+<th>ID</th>
+
+<th>Booking ID</th>
+
+<th>Request Type</th>
+
+<th>Date</th>
+
+<th>Status</th>
+
+
+</tr>
+
+
+</thead>
+
+
+
+
+<tbody>
+
+
+
+@foreach(var request in day.SpecialRequests)
+{
+
+
+<tr>
+
+
+<td>
+
+@request.Id
+
+</td>
+
+
+
+<td>
+
+@request.BookingId
+
+</td>
+
+
+
+<td class="fw-semibold">
+
+@request.RequestType
+
+</td>
+
+
+
+<td>
+
+@request.RequestDate.ToString("dd/MM/yyyy")
+
+</td>
+
+
+
+
+<td>
+
+
+
+@if(request.Status=="Approved")
+{
+
+<span class="badge bg-success">
+
+Approved
+
+</span>
+
+}
+
+else if(request.Status=="Pending")
+{
+
+<span class="badge bg-warning text-dark">
+
+Pending
+
+</span>
+
+}
+
+else if(request.Status=="Rejected")
+{
+
+<span class="badge bg-danger">
+
+Rejected
+
+</span>
+
+}
+
+else
+{
+
+<span class="badge bg-secondary">
+
+@request.Status
+
+</span>
+
+}
+
+
+
+</td>
+
+
+</tr>
+
+
+}
+
+
+
+</tbody>
+
+
+</table>
+
+
+</div>
+
+
+}
+
+else
+{
+
+
+<div class="alert alert-light">
+
+<i class="bi bi-info-circle me-2"></i>
+
+No special requests for this day.
+
+</div>
+
+
+}
+
+
+
+
+
+</div>
+
+
+</div>
+
+
+}
+
+
+
+</div>
+
+
+</div>
+
+@section Scripts
+{
+
+<style>
+
+
+/* =========================
+   PRINT STYLING
+========================= */
+
+
+@@media print {
+
+
+button,
+.btn,
+form,
+.hide-print{
+
+    display:none !important;
+
+}
+
+
+
+body{
+
+    background:white !important;
+
+}
+
+
+
+.card{
+
+    box-shadow:none !important;
+
+    border:1px solid #ccc !important;
+
+    page-break-inside:avoid;
+
+}
+
+
+
+.table{
+
+    width:100%;
+
+}
+
+
+
+th{
+
+    background:#0B3D91 !important;
+
+    color:white !important;
+
+}
+
+
+
+canvas{
+
+    display:none !important;
+
+}
+
+
+
+img{
+
+    max-width:100%;
+
+}
+
+
+
+}
+
+
+
+
+</style>
+
+
+
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+
+
+<script>
+
+
+/* =========================
+   PRINT SECTION
+========================= */
+
+
+function printSection(sectionId)
+{
+
+
+let section=document.getElementById(sectionId);
+
+
+let content=section.cloneNode(true);
+
+
+
+let originalCanvas=
+section.querySelectorAll("canvas");
+
+
+
+let clonedCanvas=
+content.querySelectorAll("canvas");
+
+
+
+originalCanvas.forEach((canvas,index)=>{
+
+
+let image=document.createElement("img");
+
+
+image.src=canvas.toDataURL("image/png");
+
+
+image.style.width="700px";
+
+image.style.height="320px";
+
+
+image.style.display="block";
+
+image.style.margin="20px auto";
+
+
+
+if(clonedCanvas[index])
+{
+
+clonedCanvas[index].replaceWith(image);
+
+}
+
+
+});
+
+
+
+
+let printWindow=window.open(
+"",
+"",
+"width=1000,height=800"
+);
+
+
+
+printWindow.document.write(`
+
+<html>
+
+<head>
+
+<title>
+Train Reservation Report
+</title>
+
+
+<style>
+
+
+body{
+
+font-family:Arial;
+
+margin:25px;
+
+}
+
+
+
+.card{
+
+border:1px solid #ddd;
+
+border-radius:10px;
+
+padding:15px;
+
+margin-bottom:20px;
+
+}
+
+
+
+table{
+
+width:100%;
+
+border-collapse:collapse;
+
+}
+
+
+
+th,td{
+
+border:1px solid #ccc;
+
+padding:8px;
+
+}
+
+
+
+th{
+
+background:#0B3D91;
+
+color:white;
+
+}
+
+
+
+img{
+
+width:700px;
+
+}
+
+
+
+</style>
+
+
+</head>
+
+
+<body>
+
+
+${content.innerHTML}
+
+
+</body>
+
+
+</html>
+
+
+`);
+
+
+
+printWindow.document.close();
+
+
+
+setTimeout(()=>{
+
+
+printWindow.print();
+
+
+printWindow.close();
+
+
+},1000);
+
+
+
+}
+
+
+
+
+
+/* =========================
+   CHART DATA
+========================= */
+
+
+const bookingLabels=[
+
+@foreach(var day in Model.Days)
+{
+    @Html.Raw($"'{day.DayName}',")
+}
+
+];
+
+
+
+
+const bookingData=[
+
+@foreach(var day in Model.Days)
+{
+    @Html.Raw($"{day.Bookings.Count},")
+}
+
+];
+
+
+
+
+const requestData=[
+
+@foreach(var day in Model.Days)
+{
+    @Html.Raw($"{day.SpecialRequests.Count},")
+}
+
+];
+
+
+
+
+
+
+/* =========================
+   BOOKING CHART
+========================= */
+
+
+const bookingCanvas =
+document.getElementById("bookingChart");
+
+
+
+if(bookingCanvas)
+{
+
+
+new Chart(
+bookingCanvas,
+{
+
+
+type:"bar",
+
+
+data:{
+
+
+labels:bookingLabels,
+
+
+datasets:[{
+
+
+label:"Bookings",
+
+data:bookingData,
+
+
+backgroundColor:"#0d6efd",
+
+
+borderRadius:8,
+
+
+borderSkipped:false
+
+
+}]
+
+
+
+},
+
+
+
+options:{
+
+
+responsive:true,
+
+
+maintainAspectRatio:false,
+
+
+
+plugins:{
+
+
+legend:{
+
+
+position:"bottom"
+
+
+},
+
+
+
+tooltip:{
+
+
+backgroundColor:"#0B3D91",
+
+padding:12
+
+
+}
+
+
+
+},
+
+
+
+
+scales:{
+
+
+x:{
+
+
+grid:{
+
+
+display:false
+
+
+}
+
+
+
+},
+
+
+
+y:{
+
+
+beginAtZero:true,
+
+
+ticks:{
+
+
+precision:0
+
+
+}
+
+
+
+}
+
+
+
+}
+
+
+
+}
+
+
+}
+
+
+);
+
+
+
+}
+
+
+
+
+
+
+
+
+
+/* =========================
+   SPECIAL REQUEST CHART
+========================= */
+
+
+const requestCanvas =
+document.getElementById("requestChart");
+
+
+
+if(requestCanvas)
+{
+
+
+new Chart(
+
+requestCanvas,
+
+{
+
+
+type:"line",
+
+
+data:{
+
+
+labels:bookingLabels,
+
+
+datasets:[{
+
+
+label:"Special Requests",
+
+
+data:requestData,
+
+
+borderColor:"#198754",
+
+
+backgroundColor:
+"rgba(25,135,84,.15)",
+
+
+fill:true,
+
+
+tension:.35,
+
+
+pointRadius:5,
+
+
+pointHoverRadius:7
+
+
+
+}]
+
+
+
+},
+
+
+
+
+options:{
+
+
+responsive:true,
+
+
+maintainAspectRatio:false,
+
+
+
+plugins:{
+
+
+legend:{
+
+
+position:"bottom"
+
+
+},
+
+
+
+tooltip:{
+
+
+backgroundColor:"#198754",
+
+padding:12
+
+
+}
+
+
+
+},
+
+
+
+scales:{
+
+
+
+x:{
+
+
+grid:{
+
+
+display:false
+
+
+}
+
+
+
+},
+
+
+
+y:{
+
+
+beginAtZero:true,
+
+
+ticks:{
+
+
+precision:0
+
+
+}
+
+
+
+}
+
+
+
+}
+
+
+
+}
+
+
+
+}
+
+
+);
+
+
+
+}
+
+
+</script>
+
+
+}

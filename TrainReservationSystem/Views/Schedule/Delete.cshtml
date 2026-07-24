@@ -1,0 +1,55 @@
+@model TrainReservationSystem.Models.Schedule
+
+@{
+    ViewData["Title"] = "Delete Schedule";
+}
+
+<div class="container mt-4">
+
+    <div class="page-card delete-box">
+
+        <div class="page-header bg-danger">
+
+            <h3>Delete Schedule</h3>
+
+        </div>
+
+        <div class="p-4">
+
+            <p class="fs-5">
+                Are you sure you want to delete this schedule?
+            </p>
+
+            <h4 class="text-primary">
+                @Model.TrainName
+            </h4>
+
+            <p class="mb-1">
+                @Model.FromStation → @Model.ToStation
+            </p>
+
+            <p>
+                @Model.TravelDate.ToString("dd MMM yyyy")
+            </p>
+
+            <hr />
+
+            <form asp-action="Delete">
+
+                <input asp-for="Id" type="hidden" />
+
+                <button class="btn btn-danger px-4">
+                    Delete
+                </button>
+
+                <a asp-action="Index" class="btn btn-outline-secondary px-4">
+                    Cancel
+                </a>
+
+            </form>
+
+        </div>
+
+    </div>
+
+</div>

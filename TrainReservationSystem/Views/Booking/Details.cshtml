@@ -1,0 +1,81 @@
+@model TrainReservationSystem.Models.Booking
+
+@{
+    ViewData["Title"] = "Booking Details";
+}
+
+<div class="container mt-4">
+
+    <div class="page-card">
+
+        <div class="page-header">
+
+            <h3>Booking Details</h3>
+
+        </div>
+
+        <div class="card-body">
+
+            <table class="table table-bordered details-table">
+
+                <tr>
+                    <th width="250">Booking ID</th>
+                    <td>@Model.Id</td>
+                </tr>
+
+                <tr>
+                    <th>Train</th>
+                    <td>@Model.TrainName</td>
+                </tr>
+
+                <tr>
+                    <th>Departure Station</th>
+                    <td>@Model.FromStation</td>
+                </tr>
+
+                <tr>
+                    <th>Destination Station</th>
+                    <td>@Model.ToStation</td>
+                </tr>
+
+                <tr>
+                    <th>Travel Date</th>
+                    <td>@Model.TravelDate.ToString("dd MMMM yyyy")</td>
+                </tr>
+
+                <tr>
+                    <th>Departure Time</th>
+                    <td>@Model.DepartureTime</td>
+                </tr>
+
+                <tr>
+                    <th>Seat Number</th>
+                    <td>@Model.SeatNumber</td>
+                </tr>
+
+                <tr>
+                    <th>Ticket Price</th>
+                    <td>LKR @Model.TicketPrice</td>
+                </tr>
+
+                <tr>
+                    <th>Status</th>
+                    <td>@Model.Status</td>
+                </tr>
+
+            </table>
+
+            <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-primary">
+                <i class="bi bi-pencil-square"></i>
+                Edit
+            </a>
+
+            <a asp-action="Index" class="btn btn-outline-secondary">
+                Back
+            </a>
+
+        </div>
+
+    </div>
+
+</div>

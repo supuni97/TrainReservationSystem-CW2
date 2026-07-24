@@ -1,0 +1,167 @@
+@model IEnumerable<TrainReservationSystem.Models.Booking>
+
+@{
+    ViewData["Title"] = "Bookings";
+}
+
+<div class="container py-4">
+
+    <div class="page-header d-flex justify-content-between align-items-center">
+
+        <div>
+
+            <h2>🚆 Train Bookings</h2>
+
+            <p>
+                Manage all train ticket reservations.
+            </p>
+
+        </div>
+
+        <a asp-action="Create" class="system-btn">
+
+            <i class="bi bi-plus-circle me-2"></i>
+
+            Create Booking
+
+        </a>
+
+    </div>
+
+    @if (TempData["Success"] != null)
+    {
+        <div class="alert alert-success shadow-sm border-0">
+            @TempData["Success"]
+        </div>
+    }
+
+    @if (!Model.Any())
+    {
+        <div class="empty-card">
+
+            <h4>No bookings available</h4>
+
+            <p class="text-muted">
+                Create your first booking to get started.
+            </p>
+
+        </div>
+    }
+    else
+    {
+        <div class="table-card">
+
+            <div class="table-responsive">
+
+                <table class="table table-hover align-middle table-theme">
+
+                    <thead class="table-primary">
+
+                        <tr>
+
+                            <th>ID</th>
+
+                            <th>Train</th>
+
+                            <th>Route</th>
+
+                            <th>Travel Date</th>
+
+                            <th>Status</th>
+
+                            <th class="text-center" width="180">
+                                Actions
+                            </th>
+
+                        </tr>
+
+                    </thead>
+
+                    <tbody>
+
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+
+                                <td>#@item.Id</td>
+
+                                <td>
+
+                                    <strong>@item.TrainName</strong>
+
+                                </td>
+
+                                <td>
+
+                                    @item.FromStation
+
+                                    <i class="bi bi-arrow-right mx-2 text-primary"></i>
+
+                                    @item.ToStation
+
+                                </td>
+
+                                <td>
+
+                                    @item.TravelDate.ToString("dd MMM yyyy")
+
+                                </td>
+
+                                <td>
+
+                                    @if (item.Status == "Confirmed")
+                                    {
+                                        <span class="badge bg-success">
+                                            Confirmed
+                                        </span>
+                                    }
+                                    else if (item.Status == "Pending")
+                                    {
+                                        <span class="badge bg-warning text-dark">
+                                            Pending
+                                        </span>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge bg-danger">
+                                            Cancelled
+                                        </span>
+                                    }
+
+                                </td>
+
+                                <td>
+
+                                    <a asp-action="Details" asp-route-id="@item.Id" class="action-btn btn-view">
+
+                                        <i class="bi bi-eye-fill"></i>
+
+                                    </a>
+
+                                    <a asp-action="Edit" asp-route-id="@item.Id" class="action-btn btn-edit">
+
+                                        <i class="bi bi-pencil-fill"></i>
+
+                                    </a>
+
+                                    <a asp-action="Delete" asp-route-id="@item.Id" class="action-btn btn-delete">
+
+                                        <i class="bi bi-trash-fill"></i>
+
+                                    </a>
+
+                                </td>
+
+                            </tr>
+                        }
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+    }
+
+</div>

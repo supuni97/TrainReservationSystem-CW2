@@ -1,0 +1,233 @@
+@model IEnumerable<TrainReservationSystem.Models.Schedule>
+
+@{
+    ViewData["Title"] = "Train Schedules";
+}
+
+
+<div class="container py-4">
+
+
+    <div class="page-header d-flex justify-content-between align-items-center">
+
+
+        <div>
+
+            <h2>🚆Train Schedules</h2>
+
+            <p>
+                Manage train schedules and departure information.
+            </p>
+
+        </div>
+
+
+        <a asp-action="Create" class="system-btn">
+
+            <i class="bi bi-plus-circle me-2"></i>
+
+            Add Schedule
+
+        </a>
+
+
+    </div>
+
+
+
+    @if (TempData["Success"] != null)
+    {
+        <div class="alert alert-success shadow-sm border-0">
+
+            @TempData["Success"]
+
+        </div>
+    }
+
+
+
+    @if (!Model.Any())
+    {
+        <div class="empty-card">
+
+            <h4>No schedules available</h4>
+
+            <p class="text-muted">
+                Create your first train schedule.
+            </p>
+
+        </div>
+    }
+
+    else
+    {
+
+
+        <div class="table-card">
+
+
+            <div class="table-responsive">
+
+
+                <table class="table table-hover align-middle table-theme">
+
+
+                    <thead class="dark-table-header">
+
+                        <tr>
+
+                            <th>Train</th>
+
+                            <th>Route</th>
+
+                            <th>Travel Date</th>
+
+                            <th>Departure</th>
+
+                            <th>Arrival</th>
+
+                            <th>Status</th>
+
+                            <th class="text-center" width="180">
+                                Actions
+                            </th>
+
+
+                        </tr>
+
+
+                    </thead>
+
+
+
+                    <tbody>
+
+
+                        @foreach (var item in Model)
+                        {
+
+                            <tr>
+
+
+                                <td>
+
+                                    <strong>
+                                        @item.TrainName
+                                    </strong>
+
+                                </td>
+
+
+
+                                <td>
+
+                                    @item.FromStation
+
+                                    <i class="bi bi-arrow-right mx-2 text-primary"></i>
+
+                                    @item.ToStation
+
+                                </td>
+
+
+
+                                <td>
+
+                                    @item.TravelDate.ToString("dd MMM yyyy")
+
+                                </td>
+
+
+
+                                <td>
+
+                                    @item.DepartureTime
+
+                                </td>
+
+
+
+                                <td>
+
+                                    @item.ArrivalTime
+
+                                </td>
+
+
+
+                                <td>
+
+
+                                    @if (item.IsActive)
+                                    {
+
+                                        <span class="badge bg-success">
+                                            Active
+                                        </span>
+
+                                    }
+                                    else
+                                    {
+
+                                        <span class="badge bg-secondary">
+                                            Inactive
+                                        </span>
+
+                                    }
+
+
+                                </td>
+
+
+
+                                <td class="text-center">
+
+
+                                    <a asp-action="Details" asp-route-id="@item.Id" class="action-btn btn-view">
+
+                                        <i class="bi bi-eye-fill"></i>
+
+                                    </a>
+
+
+
+                                    <a asp-action="Edit" asp-route-id="@item.Id" class="action-btn btn-edit">
+
+                                        <i class="bi bi-pencil-fill"></i>
+
+                                    </a>
+
+
+
+                                    <a asp-action="Delete" asp-route-id="@item.Id" class="action-btn btn-delete">
+
+                                        <i class="bi bi-trash-fill"></i>
+
+                                    </a>
+
+
+                                </td>
+
+
+
+                            </tr>
+
+                        }
+
+
+                    </tbody>
+
+
+                </table>
+
+
+            </div>
+
+
+        </div>
+
+
+    }
+
+
+</div>

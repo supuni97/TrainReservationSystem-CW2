@@ -1,0 +1,146 @@
+@model TrainReservationSystem.Models.Booking
+
+<div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
+
+<div class="row">
+
+    <div class="col-md-6 mb-3">
+
+        <label asp-for="TrainName" class="form-label"></label>
+
+        <select asp-for="TrainName" class="form-select">
+
+            <option value="">-- Select Train --</option>
+            <option>Intercity Express</option>
+            <option>Udarata Menike</option>
+            <option>Yal Devi</option>
+            <option>Ruhunu Kumari</option>
+            <option>Podi Menike</option>
+
+        </select>
+
+        <span asp-validation-for="TrainName" class="text-danger"></span>
+
+    </div>
+
+    <div class="col-md-6 mb-3">
+
+        <label asp-for="TravelDate" class="form-label"></label>
+
+        <input asp-for="TravelDate" type="date" class="form-control" min="@DateTime.Today.ToString("yyyy-MM-dd")" />
+
+        <span asp-validation-for="TravelDate" class="text-danger"></span>
+
+    </div>
+
+</div>
+
+<div class="row">
+
+    <div class="col-md-6 mb-3">
+
+        <label asp-for="FromStation" class="form-label"></label>
+
+        <select asp-for="FromStation" class="form-select">
+
+            <option value="">-- Select Departure Station --</option>
+
+            <option>Colombo Fort</option>
+            <option>Maradana</option>
+            <option>Peradeniya</option>
+            <option>Kandy</option>
+            <option>Hatton</option>
+            <option>Nanu Oya</option>
+            <option>Ella</option>
+            <option>Badulla</option>
+            <option>Galle</option>
+            <option>Matara</option>
+            <option>Anuradhapura</option>
+            <option>Jaffna</option>
+
+        </select>
+
+        <span asp-validation-for="FromStation" class="text-danger"></span>
+
+    </div>
+
+    <div class="col-md-6 mb-3">
+
+        <label asp-for="ToStation" class="form-label"></label>
+
+        <select asp-for="ToStation" class="form-select">
+
+            <option value="">-- Select Destination Station --</option>
+
+            <option>Colombo Fort</option>
+            <option>Maradana</option>
+            <option>Peradeniya</option>
+            <option>Kandy</option>
+            <option>Hatton</option>
+            <option>Nanu Oya</option>
+            <option>Ella</option>
+            <option>Badulla</option>
+            <option>Galle</option>
+            <option>Matara</option>
+            <option>Anuradhapura</option>
+            <option>Jaffna</option>
+
+        </select>
+
+        <span asp-validation-for="ToStation" class="text-danger"></span>
+
+    </div>
+
+</div>
+
+<div class="row">
+
+    <div class="col-md-4 mb-3">
+
+        <label asp-for="DepartureTime" class="form-label"></label>
+
+        <input asp-for="DepartureTime" type="time" class="form-control" />
+
+        <span asp-validation-for="DepartureTime" class="text-danger"></span>
+
+    </div>
+
+    <div class="col-md-4 mb-3">
+
+        <label asp-for="SeatNumber" class="form-label"></label>
+
+        <input asp-for="SeatNumber" class="form-control" placeholder="Example: A01" maxlength="3" />
+
+        <span asp-validation-for="SeatNumber" class="text-danger"></span>
+
+    </div>
+
+    <div class="col-md-4 mb-3">
+
+        <label asp-for="TicketPrice" class="form-label"></label>
+
+        <input asp-for="TicketPrice" type="number" class="form-control" min="100" max="10000" step="50" />
+
+        <span asp-validation-for="TicketPrice" class="text-danger"></span>
+
+    </div>
+
+</div>
+
+<div class="row">
+
+    <div class="col-md-4 mb-3">
+
+        <label asp-for="Status" class="form-label"></label>
+
+        <select asp-for="Status" class="form-select">
+
+            <option>Confirmed</option>
+            <option>Pending</option>
+            <option>Cancelled</option>
+
+        </select>
+
+    </div>
+
+</div>

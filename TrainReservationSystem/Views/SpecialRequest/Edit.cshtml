@@ -1,0 +1,122 @@
+@model TrainReservationSystem.Models.SpecialRequest
+
+@{
+    ViewData["Title"] = "Edit Special Request";
+}
+
+
+
+<div class="container mt-4">
+
+
+    <div class="page-card">
+
+
+        <div class="page-header">
+
+
+            <h3>
+
+                <i class="bi bi-pencil-square"></i>
+
+                Edit Special Request
+
+            </h3>
+
+
+            <small>
+
+                Update the passenger request information below.
+
+            </small>
+
+
+        </div>
+
+
+
+
+        <div class="card-body">
+
+
+            <form asp-action="Edit" method="post">
+
+
+                <input asp-for="Id" type="hidden" />
+
+
+
+                <div asp-validation-summary="ModelOnly"
+                     class="alert alert-danger">
+                </div>
+
+
+
+                <partial name="_SpecialRequestForm" />
+
+
+
+                <hr />
+
+
+
+                <button type="submit"
+                        class="btn btn-primary">
+
+
+                    <i class="bi bi-check-circle-fill"></i>
+
+                    Save Changes
+
+
+                </button>
+
+
+
+                <a asp-action="Details"
+                   asp-route-id="@Model.Id"
+                   class="btn btn-outline-primary">
+
+
+                    <i class="bi bi-eye-fill"></i>
+
+                    View
+
+
+                </a>
+
+
+
+                <a asp-action="Index"
+                   class="btn btn-outline-secondary">
+
+
+                    <i class="bi bi-arrow-left-circle-fill"></i>
+
+                    Back
+
+
+                </a>
+
+
+
+            </form>
+
+
+
+        </div>
+
+
+    </div>
+
+
+</div>
+
+
+
+@section Scripts
+{
+
+    <partial name="_ValidationScriptsPartial" />
+
+}

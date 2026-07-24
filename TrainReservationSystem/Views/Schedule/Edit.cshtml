@@ -1,0 +1,49 @@
+@model TrainReservationSystem.Models.Schedule
+
+@{
+    ViewData["Title"] = "Edit Schedule";
+}
+
+<div class="container mt-4">
+
+    <div class="page-card">
+
+        <div class="page-header">
+
+            <h3>Edit Schedule</h3>
+
+            <p class="mb-0">
+                Update the schedule information.
+            </p>
+
+        </div>
+
+        <div class="card-body p-4">
+
+            <form asp-action="Edit" method="post">
+
+                <input asp-for="Id" type="hidden" />
+
+                <partial name="_ScheduleForm" model="Model" />
+
+                <hr />
+
+                <button class="btn btn-primary px-4">
+                    Save Changes
+                </button>
+
+                <a asp-action="Index" class="btn btn-outline-secondary px-4">
+                    Back
+                </a>
+
+            </form>
+
+        </div>
+
+    </div>
+
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

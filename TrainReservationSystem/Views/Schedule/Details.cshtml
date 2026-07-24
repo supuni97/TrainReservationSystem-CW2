@@ -1,0 +1,79 @@
+@model TrainReservationSystem.Models.Schedule
+
+@{
+    ViewData["Title"] = "Schedule Details";
+}
+
+<div class="container mt-4">
+
+    <div class="page-card">
+
+        <div class="page-header">
+
+            <h3>Schedule Details</h3>
+
+        </div>
+
+        <div class="card-body p-4">
+
+            <table class="table table-bordered details-table">
+
+                <tr>
+                    <th>Train</th>
+                    <td>@Model.TrainName</td>
+                </tr>
+
+                <tr>
+                    <th>Departure Station</th>
+                    <td>@Model.FromStation</td>
+                </tr>
+
+                <tr>
+                    <th>Destination Station</th>
+                    <td>@Model.ToStation</td>
+                </tr>
+
+                <tr>
+                    <th>Travel Date</th>
+                    <td>@Model.TravelDate.ToString("dd MMM yyyy")</td>
+                </tr>
+
+                <tr>
+                    <th>Departure Time</th>
+                    <td>@Model.DepartureTime</td>
+                </tr>
+
+                <tr>
+                    <th>Arrival Time</th>
+                    <td>@Model.ArrivalTime</td>
+                </tr>
+
+                <tr>
+                    <th>Status</th>
+                    <td>
+                        @if (Model.IsActive)
+                        {
+                            <span class="badge bg-success">Active</span>
+                        }
+                        else
+                        {
+                            <span class="badge bg-secondary">Inactive</span>
+                        }
+                    </td>
+                </tr>
+
+            </table>
+
+            <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-primary">
+                Edit
+            </a>
+
+            <a asp-action="Index" class="btn btn-outline-secondary">
+                Back
+            </a>
+
+        </div>
+
+    </div>
+
+</div>
