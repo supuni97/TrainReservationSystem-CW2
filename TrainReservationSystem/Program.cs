@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using TrainReservationSystem.Data;
 using TrainReservationSystem.Services;
+using TrainReservationSystem.Services.Api;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -14,6 +15,11 @@ builder.Services.AddControllersWithViews();
 
 // Session
 builder.Services.AddSession();
+
+builder.Services.AddHttpClient<IScheduleApiService, ScheduleApiService>(client =>
+{
+    client.BaseAddress = new Uri("https://localhost:7296/");
+});
 
 // Application Services
 builder.Services.AddScoped<BookingService>();
