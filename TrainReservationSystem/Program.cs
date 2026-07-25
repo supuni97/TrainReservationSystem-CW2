@@ -21,6 +21,11 @@ builder.Services.AddHttpClient<IScheduleApiService, ScheduleApiService>(client =
     client.BaseAddress = new Uri("https://localhost:7296/");
 });
 
+builder.Services.AddHttpClient<IBookingApiService, BookingApiService>(client =>
+{
+    client.BaseAddress = new Uri("https://localhost:7296/");
+});
+
 // Application Services
 builder.Services.AddScoped<BookingService>();
 builder.Services.AddScoped<ScheduleService>();
