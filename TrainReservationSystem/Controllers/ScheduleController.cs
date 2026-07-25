@@ -1,44 +1,32 @@
 using Microsoft.AspNetCore.Mvc;
 using TrainReservationSystem.Models;
-using TrainReservationSystem.Services;
+using TrainReservationSystem.Services.Api;
 
 namespace TrainReservationSystem.Controllers;
 
 public class ScheduleController : Controller
 {
-    private readonly ScheduleService _scheduleService;
+    private readonly IScheduleApiService _scheduleApiService;
 
-
-    public ScheduleController(ScheduleService scheduleService)
+    public ScheduleController(IScheduleApiService scheduleApiService)
     {
-        _scheduleService = scheduleService;
+        _scheduleApiService = scheduleApiService;
     }
-
-
 
     public async Task<IActionResult> Index()
     {
-        return View(await _scheduleService.GetAll());
+        return View(await _scheduleApiService.GetAll());
     }
-
-
-
 
     public async Task<IActionResult> Details(int id)
     {
-        var schedule =
-            await _scheduleService.GetById(id);
-
+        var schedule = await _scheduleApiService.GetById(id);
 
         if (schedule == null)
             return NotFound();
 
-
         return View(schedule);
     }
-
-
-
 
     [HttpGet]
     public IActionResult Create()
@@ -46,21 +34,13 @@ public class ScheduleController : Controller
         return View(new Schedule());
     }
 
-
-
-
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Create(
-        Schedule schedule)
+    public async Task<IActionResult> Create(Schedule schedule)
     {
         ValidateSchedule(schedule);
 
-
-        var schedules =
-            await _scheduleService.GetAll();
-
-
+        var schedules = await _scheduleApiService.GetAll();
 
         if (schedules.Any(s =>
             s.TrainName == schedule.TrainName &&
@@ -69,64 +49,37 @@ public class ScheduleController : Controller
         {
             ModelState.AddModelError(
                 "",
-                "A schedule already exists for this train and departure time."
-            );
+                "A schedule already exists for this train and departure time.");
         }
-
-
-
 
         if (!ModelState.IsValid)
             return View(schedule);
 
+        await _scheduleApiService.Add(schedule);
 
-
-        await _scheduleService.Add(schedule);
-
-
-
-        TempData["Success"] =
-            "Schedule created successfully.";
-
+        TempData["Success"] = "Schedule created successfully.";
 
         return RedirectToAction(nameof(Index));
     }
 
-
-
-
-
     [HttpGet]
     public async Task<IActionResult> Edit(int id)
     {
-        var schedule =
-            await _scheduleService.GetById(id);
-
+        var schedule = await _scheduleApiService.GetById(id);
 
         if (schedule == null)
             return NotFound();
 
-
         return View(schedule);
     }
 
-
-
-
-
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Edit(
-        Schedule schedule)
+    public async Task<IActionResult> Edit(Schedule schedule)
     {
         ValidateSchedule(schedule);
 
-
-
-        var schedules =
-            await _scheduleService.GetAll();
-
-
+        var schedules = await _scheduleApiService.GetAll();
 
         if (schedules.Any(s =>
             s.Id != schedule.Id &&
@@ -136,91 +89,50 @@ public class ScheduleController : Controller
         {
             ModelState.AddModelError(
                 "",
-                "A schedule already exists for this train and departure time."
-            );
+                "A schedule already exists for this train and departure time.");
         }
-
-
-
 
         if (!ModelState.IsValid)
             return View(schedule);
 
-
-
-
-        var existing =
-            await _scheduleService.GetById(schedule.Id);
-
-
+        var existing = await _scheduleApiService.GetById(schedule.Id);
 
         if (existing == null)
             return NotFound();
 
+        await _scheduleApiService.Update(schedule);
 
-
-        await _scheduleService.Update(schedule);
-
-
-
-        TempData["Success"] =
-            "Schedule updated successfully.";
-
+        TempData["Success"] = "Schedule updated successfully.";
 
         return RedirectToAction(nameof(Index));
     }
 
-
-
-
-
     [HttpGet]
     public async Task<IActionResult> Delete(int id)
     {
-        var schedule =
-            await _scheduleService.GetById(id);
-
-
+        var schedule = await _scheduleApiService.GetById(id);
 
         if (schedule == null)
             return NotFound();
 
-
         return View(schedule);
     }
-
-
-
-
 
     [HttpPost, ActionName("Delete")]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> DeleteConfirmed(int id)
     {
-        var schedule =
-            await _scheduleService.GetById(id);
-
-
+        var schedule = await _scheduleApiService.GetById(id);
 
         if (schedule == null)
             return NotFound();
 
+        await _scheduleApiService.Delete(id);
 
-
-        await _scheduleService.Delete(id);
-
-
-
-        TempData["Success"] =
-            "Schedule deleted successfully.";
-
+        TempData["Success"] = "Schedule deleted successfully.";
 
         return RedirectToAction(nameof(Index));
     }
-
-
-
-
 
     private void ValidateSchedule(Schedule schedule)
     {
@@ -228,28 +140,21 @@ public class ScheduleController : Controller
         {
             ModelState.AddModelError(
                 "ToStation",
-                "Departure and destination stations cannot be the same."
-            );
+                "Departure and destination stations cannot be the same.");
         }
-
-
 
         if (schedule.ArrivalTime <= schedule.DepartureTime)
         {
             ModelState.AddModelError(
                 "ArrivalTime",
-                "Arrival time must be after departure time."
-            );
+                "Arrival time must be after departure time.");
         }
-
-
 
         if (schedule.TravelDate.Date < DateTime.Today)
         {
             ModelState.AddModelError(
                 "TravelDate",
-                "Travel date cannot be in the past."
-            );
+                "Travel date cannot be in the past.");
         }
     }
 }
