@@ -1,4 +1,5 @@
 <Solution>
   <Project Path="TrainReservationSystem.Tests/TrainReservationSystem.Tests.csproj" />
   <Project Path="TrainReservationSystem/TrainReservationSystem.csproj" />
+  <Project Path="BookingManagement.Api/BookingManagement.Api.csproj" />
 </Solution>
