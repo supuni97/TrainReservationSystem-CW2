@@ -1,29 +1,26 @@
 using Microsoft.AspNetCore.Mvc;
 using TrainReservationSystem.Models;
-using TrainReservationSystem.Services;
+using TrainReservationSystem.Services.Api;
 
 namespace TrainReservationSystem.Controllers;
 
 public class BookingController : Controller
 {
-    private readonly BookingService _bookingService;
+    private readonly IBookingApiService _bookingApiService;
 
-    public BookingController(BookingService bookingService)
+    public BookingController(IBookingApiService bookingApiService)
     {
-        _bookingService = bookingService;
+        _bookingApiService = bookingApiService;
     }
-
 
     public async Task<IActionResult> Index()
     {
-        return View(await _bookingService.GetAll());
+        return View(await _bookingApiService.GetAll());
     }
-
-
 
     public async Task<IActionResult> Details(int id)
     {
-        var booking = await _bookingService.GetById(id);
+        var booking = await _bookingApiService.GetById(id);
 
         if (booking == null)
             return NotFound();
@@ -31,15 +28,11 @@ public class BookingController : Controller
         return View(booking);
     }
 
-
-
     [HttpGet]
     public IActionResult Create()
     {
         return View(new Booking());
     }
-
-
 
     [HttpPost]
     [ValidateAntiForgeryToken]
@@ -47,9 +40,7 @@ public class BookingController : Controller
     {
         ValidateBooking(booking);
 
-
-        var bookings = await _bookingService.GetAll();
-
+        var bookings = await _bookingApiService.GetAll();
 
         if (bookings.Any(b =>
             b.TrainName == booking.TrainName &&
@@ -59,32 +50,23 @@ public class BookingController : Controller
         {
             ModelState.AddModelError(
                 "",
-                "This seat has already been booked for the selected train and departure."
-            );
+                "This seat has already been booked for the selected train and departure.");
         }
-
 
         if (!ModelState.IsValid)
             return View(booking);
 
+        await _bookingApiService.Add(booking);
 
-        await _bookingService.Add(booking);
-
-
-        TempData["Success"] =
-            "Booking created successfully.";
-
+        TempData["Success"] = "Booking created successfully.";
 
         return RedirectToAction(nameof(Index));
     }
 
-
-
-
     [HttpGet]
     public async Task<IActionResult> Edit(int id)
     {
-        var booking = await _bookingService.GetById(id);
+        var booking = await _bookingApiService.GetById(id);
 
         if (booking == null)
             return NotFound();
@@ -92,19 +74,13 @@ public class BookingController : Controller
         return View(booking);
     }
 
-
-
-
-
     [HttpPost]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Edit(Booking booking)
     {
         ValidateBooking(booking);
 
-
-        var bookings = await _bookingService.GetAll();
-
+        var bookings = await _bookingApiService.GetAll();
 
         if (bookings.Any(b =>
             b.Id != booking.Id &&
@@ -115,83 +91,50 @@ public class BookingController : Controller
         {
             ModelState.AddModelError(
                 "",
-                "This seat has already been booked for the selected train and departure."
-            );
+                "This seat has already been booked for the selected train and departure.");
         }
-
-
 
         if (!ModelState.IsValid)
             return View(booking);
 
-
-
-        var existing =
-            await _bookingService.GetById(booking.Id);
-
+        var existing = await _bookingApiService.GetById(booking.Id);
 
         if (existing == null)
             return NotFound();
 
+        await _bookingApiService.Update(booking);
 
-
-        await _bookingService.Update(booking);
-
-
-
-        TempData["Success"] =
-            "Booking updated successfully.";
-
+        TempData["Success"] = "Booking updated successfully.";
 
         return RedirectToAction(nameof(Index));
     }
 
-
-
-
     [HttpGet]
     public async Task<IActionResult> Delete(int id)
     {
-        var booking =
-            await _bookingService.GetById(id);
-
+        var booking = await _bookingApiService.GetById(id);
 
         if (booking == null)
             return NotFound();
 
-
         return View(booking);
     }
-
-
-
 
     [HttpPost, ActionName("Delete")]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> DeleteConfirmed(int id)
     {
-        var booking =
-            await _bookingService.GetById(id);
-
+        var booking = await _bookingApiService.GetById(id);
 
         if (booking == null)
             return NotFound();
 
+        await _bookingApiService.Delete(id);
 
-
-        await _bookingService.Delete(id);
-
-
-
-        TempData["Success"] =
-            "Booking deleted successfully.";
-
+        TempData["Success"] = "Booking deleted successfully.";
 
         return RedirectToAction(nameof(Index));
     }
-
-
-
 
     private void ValidateBooking(Booking booking)
     {
@@ -199,26 +142,21 @@ public class BookingController : Controller
         {
             ModelState.AddModelError(
                 "ToStation",
-                "Departure and destination stations cannot be the same."
-            );
+                "Departure and destination stations cannot be the same.");
         }
-
 
         if (booking.TravelDate.Date < DateTime.Today)
         {
             ModelState.AddModelError(
                 "TravelDate",
-                "Travel date cannot be in the past."
-            );
+                "Travel date cannot be in the past.");
         }
-
 
         if (booking.TravelDate == default)
         {
             ModelState.AddModelError(
                 "TravelDate",
-                "Please select a valid travel date."
-            );
+                "Please select a valid travel date.");
         }
     }
 }

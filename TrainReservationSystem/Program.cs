@@ -16,30 +16,28 @@ builder.Services.AddControllersWithViews();
 // Session
 builder.Services.AddSession();
 
+// Schedule Microservice
 builder.Services.AddHttpClient<IScheduleApiService, ScheduleApiService>(client =>
 {
     client.BaseAddress = new Uri("https://localhost:7296/");
 });
 
+// Booking Microservice
 builder.Services.AddHttpClient<IBookingApiService, BookingApiService>(client =>
 {
-    client.BaseAddress = new Uri("https://localhost:7296/");
+    client.BaseAddress = new Uri("https://localhost:7241/");
 });
 
-// Application Services
-builder.Services.AddScoped<BookingService>();
-builder.Services.AddScoped<ScheduleService>();
+// Application Services (still local)
 builder.Services.AddScoped<SpecialRequestService>();
 builder.Services.AddScoped<ReportService>();
 builder.Services.AddScoped<ChatbotService>();
 
 var app = builder.Build();
 
-using(var scope = app.Services.CreateScope())
+using (var scope = app.Services.CreateScope())
 {
-    var context =
-        scope.ServiceProvider
-        .GetRequiredService<ApplicationDbContext>();
+    var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
 
     DbInitializer.Seed(context);
 }
