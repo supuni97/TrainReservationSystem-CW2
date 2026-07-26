@@ -19,13 +19,13 @@ builder.Services.AddSession();
 // Schedule Microservice
 builder.Services.AddHttpClient<IScheduleApiService, ScheduleApiService>(client =>
 {
-    client.BaseAddress = new Uri("https://localhost:7296/");
+    client.BaseAddress = new Uri("http://localhost:5242/");
 });
 
 // Booking Microservice
 builder.Services.AddHttpClient<IBookingApiService, BookingApiService>(client =>
 {
-    client.BaseAddress = new Uri("https://localhost:7241/");
+    client.BaseAddress = new Uri("http://localhost:5141/");
 });
 
 // Application Services (still local)

@@ -1,22 +1,19 @@
 using TrainReservationSystem.Models;
+using TrainReservationSystem.Services.Api;
 
 namespace TrainReservationSystem.Services;
-
 public class ChatbotService
 {
-    private readonly BookingService _bookingService;
-    private readonly ScheduleService _scheduleService;
+    private readonly IBookingApiService _bookingApiService;
+private readonly IScheduleApiService _scheduleApiService;
 
-
-    public ChatbotService(
-        BookingService bookingService,
-        ScheduleService scheduleService)
-    {
-        _bookingService = bookingService;
-        _scheduleService = scheduleService;
-    }
-
-
+   public ChatbotService(
+    IBookingApiService bookingApiService,
+    IScheduleApiService scheduleApiService)
+{
+    _bookingApiService = bookingApiService;
+    _scheduleApiService = scheduleApiService;
+}
 
     public string GetResponse(string message)
     {
@@ -30,10 +27,11 @@ if (string.IsNullOrWhiteSpace(message))
         .Trim();
 
 
-var bookings = _bookingService
+var bookings = _bookingApiService
     .GetAll()
     .Result;
-var schedules = _scheduleService
+
+var schedules = _scheduleApiService
     .GetAll()
     .Result;
 
