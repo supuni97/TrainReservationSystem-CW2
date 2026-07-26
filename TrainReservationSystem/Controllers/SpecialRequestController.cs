@@ -1,23 +1,22 @@
 using Microsoft.AspNetCore.Mvc;
 using TrainReservationSystem.Models;
 using TrainReservationSystem.Services;
+using TrainReservationSystem.Services.Api;
 
 namespace TrainReservationSystem.Controllers;
 
 public class SpecialRequestController : Controller
 {
     private readonly SpecialRequestService _specialRequestService;
-    private readonly BookingService _bookingService;
-
+private readonly IBookingApiService _bookingApiService;
 
     public SpecialRequestController(
-        SpecialRequestService specialRequestService,
-        BookingService bookingService)
-    {
-        _specialRequestService = specialRequestService;
-        _bookingService = bookingService;
-    }
-
+          SpecialRequestService specialRequestService,
+    IBookingApiService bookingApiService)
+{
+    _specialRequestService = specialRequestService;
+    _bookingApiService = bookingApiService;
+}
 
 
     public async Task<IActionResult> Index()
@@ -234,7 +233,7 @@ public class SpecialRequestController : Controller
     private async Task LoadBookings()
     {
         ViewBag.Bookings =
-            await _bookingService.GetAll();
+            await _bookingApiService.GetAll();
     }
 
 
@@ -245,7 +244,7 @@ public class SpecialRequestController : Controller
         SpecialRequest request)
     {
         var bookings =
-            await _bookingService.GetAll();
+            await _bookingApiService.GetAll();
 
 
 
