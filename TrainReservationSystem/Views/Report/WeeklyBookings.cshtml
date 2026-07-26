@@ -334,14 +334,15 @@ Generate Report
 
         <!-- Weekly Summary Print -->
 
-        <button class="btn btn-outline-secondary flex-fill"
-                onclick="printSection('weeklySummary')">
+        <button type="button"
+        class="btn btn-outline-secondary flex-fill"
+        onclick="exportPdf('weeklySummary')">
 
-            <i class="bi bi-printer me-1"></i>
+    <i class="bi bi-file-earmark-pdf-fill me-1"></i>
 
-            Export PDF
+    Export PDF
 
-        </button>
+</button>
 
 
     </div>
@@ -714,20 +715,15 @@ Daily booking details and passenger special requests.
 
 </div>
 
+<button type="button"
+        class="btn btn-outline-dark"
+        onclick="exportPdf('dailySection')">
 
+    <i class="bi bi-file-earmark-pdf-fill me-2"></i>
 
-<button class="btn btn-outline-dark"
-
-onclick="printSection('dailySection')">
-
-
-<i class="bi bi-printer-fill me-2"></i>
-
-Print Daily Report
-
+     Daily Report PDF
 
 </button>
-
 
 </div>
 
@@ -1277,10 +1273,12 @@ img{
 
 
 
-
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
 <script>
 
@@ -1290,187 +1288,48 @@ img{
 ========================= */
 
 
-function printSection(sectionId)
+async function exportPdf(sectionId)
 {
+    const { jsPDF } = window.jspdf;
 
+    const element = document.getElementById(sectionId);
 
-let section=document.getElementById(sectionId);
+    const canvas = await html2canvas(element, {
+        scale: 2,
+        useCORS: true,
+        backgroundColor: "#ffffff"
+    });
 
+    const imgData = canvas.toDataURL("image/png");
 
-let content=section.cloneNode(true);
+    const pdf = new jsPDF("p", "mm", "a4");
 
+    const pageWidth = pdf.internal.pageSize.getWidth();
+    const pageHeight = pdf.internal.pageSize.getHeight();
 
+    const imgWidth = pageWidth;
+    const imgHeight = canvas.height * imgWidth / canvas.width;
 
-let originalCanvas=
-section.querySelectorAll("canvas");
+    let heightLeft = imgHeight;
+    let position = 0;
 
+    pdf.addImage(imgData, "PNG", 0, position, imgWidth, imgHeight);
 
+    heightLeft -= pageHeight;
 
-let clonedCanvas=
-content.querySelectorAll("canvas");
+    while (heightLeft > 0)
+    {
+        position = heightLeft - imgHeight;
 
+        pdf.addPage();
 
+        pdf.addImage(imgData, "PNG", 0, position, imgWidth, imgHeight);
 
-originalCanvas.forEach((canvas,index)=>{
+        heightLeft -= pageHeight;
+    }
 
-
-let image=document.createElement("img");
-
-
-image.src=canvas.toDataURL("image/png");
-
-
-image.style.width="700px";
-
-image.style.height="320px";
-
-
-image.style.display="block";
-
-image.style.margin="20px auto";
-
-
-
-if(clonedCanvas[index])
-{
-
-clonedCanvas[index].replaceWith(image);
-
+    pdf.save("WeeklyReport.pdf");
 }
-
-
-});
-
-
-
-
-let printWindow=window.open(
-"",
-"",
-"width=1000,height=800"
-);
-
-
-
-printWindow.document.write(`
-
-<html>
-
-<head>
-
-<title>
-Train Reservation Report
-</title>
-
-
-<style>
-
-
-body{
-
-font-family:Arial;
-
-margin:25px;
-
-}
-
-
-
-.card{
-
-border:1px solid #ddd;
-
-border-radius:10px;
-
-padding:15px;
-
-margin-bottom:20px;
-
-}
-
-
-
-table{
-
-width:100%;
-
-border-collapse:collapse;
-
-}
-
-
-
-th,td{
-
-border:1px solid #ccc;
-
-padding:8px;
-
-}
-
-
-
-th{
-
-background:#0B3D91;
-
-color:white;
-
-}
-
-
-
-img{
-
-width:700px;
-
-}
-
-
-
-</style>
-
-
-</head>
-
-
-<body>
-
-
-${content.innerHTML}
-
-
-</body>
-
-
-</html>
-
-
-`);
-
-
-
-printWindow.document.close();
-
-
-
-setTimeout(()=>{
-
-
-printWindow.print();
-
-
-printWindow.close();
-
-
-},1000);
-
-
-
-}
-
-
-
 
 
 /* =========================

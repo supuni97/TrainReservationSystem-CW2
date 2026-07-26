@@ -84,8 +84,7 @@ public class ReportController : Controller
 
 
         csv.AppendLine(
-            $"Total Revenue,Rs {report.TotalRevenue:N2}");
-
+    $"Total Revenue,Rs {report.TotalRevenue:0.00}");
 
 
         csv.AppendLine();

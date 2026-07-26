@@ -1,20 +1,22 @@
+using Microsoft.EntityFrameworkCore;
 using TrainReservationSystem.Data;
 using TrainReservationSystem.Models.ViewModels;
-using Microsoft.EntityFrameworkCore;
+using TrainReservationSystem.Services.Api;
 
 namespace TrainReservationSystem.Services;
 
 public class ReportService
 {
     private readonly ApplicationDbContext _context;
+    private readonly IBookingApiService _bookingApiService;
 
-
-    public ReportService(ApplicationDbContext context)
+    public ReportService(
+        ApplicationDbContext context,
+        IBookingApiService bookingApiService)
     {
         _context = context;
+        _bookingApiService = bookingApiService;
     }
-
-
 
     public async Task<WeeklyReportViewModel> GetWeeklyReportAsync(DateTime selectedDate)
     {
@@ -22,11 +24,8 @@ public class ReportService
             ? 6
             : (int)selectedDate.DayOfWeek - 1;
 
-
         DateTime weekStart = selectedDate.Date.AddDays(-diff);
         DateTime weekEnd = weekStart.AddDays(6);
-
-
 
         var report = new WeeklyReportViewModel
         {
@@ -35,23 +34,26 @@ public class ReportService
             GeneratedOn = DateTime.Now
         };
 
+        // ============================
+        // Get Bookings from Booking API
+        // ============================
 
+        var allBookings = await _bookingApiService.GetAll();
 
-        var weeklyBookings = await _context.Bookings
+        var weeklyBookings = allBookings
             .Where(b =>
                 b.TravelDate.Date >= weekStart &&
                 b.TravelDate.Date <= weekEnd)
             .OrderBy(b => b.TravelDate)
-            .ToListAsync();
-
-
+            .ToList();
 
         report.TotalBookings = weeklyBookings.Count;
 
-        report.TotalRevenue =
-            weeklyBookings.Sum(b => b.TicketPrice);
+        report.TotalRevenue = weeklyBookings.Sum(b => b.TicketPrice);
 
-
+        // ============================
+        // Get Special Requests locally
+        // ============================
 
         var weeklyRequests = await _context.SpecialRequests
             .Where(r =>
@@ -60,19 +62,15 @@ public class ReportService
             .OrderBy(r => r.RequestDate)
             .ToListAsync();
 
+        report.TotalSpecialRequests = weeklyRequests.Count;
 
+        // ============================
+        // Daily Breakdown
+        // ============================
 
-        report.TotalSpecialRequests =
-            weeklyRequests.Count;
-
-
-
-        for(int i = 0; i < 7; i++)
+        for (int i = 0; i < 7; i++)
         {
-            DateTime currentDate =
-                weekStart.AddDays(i);
-
-
+            DateTime currentDate = weekStart.AddDays(i);
 
             report.Days.Add(new DailyReportViewModel
             {
@@ -80,74 +78,51 @@ public class ReportService
 
                 Date = currentDate,
 
-
                 Bookings = weeklyBookings
                     .Where(b =>
-                        b.TravelDate.Date ==
-                        currentDate.Date)
-                    .OrderBy(b=>b.DepartureTime)
+                        b.TravelDate.Date == currentDate.Date)
+                    .OrderBy(b => b.DepartureTime)
                     .ToList(),
-
 
                 SpecialRequests = weeklyRequests
                     .Where(r =>
-                        r.RequestDate.Date ==
-                        currentDate.Date)
-                    .OrderBy(r=>r.RequestType)
+                        r.RequestDate.Date == currentDate.Date)
+                    .OrderBy(r => r.RequestType)
                     .ToList()
             });
         }
 
+        // ============================
+        // Insights
+        // ============================
 
-
-        var busiest =
-            report.Days
-            .OrderByDescending(d=>d.Bookings.Count)
+        var busiest = report.Days
+            .OrderByDescending(d => d.Bookings.Count)
             .FirstOrDefault();
 
-
-
-        if(busiest != null)
+        if (busiest != null)
         {
-            report.BusiestDay =
-                busiest.DayName;
-
-            report.BusiestDayBookings =
-                busiest.Bookings.Count;
+            report.BusiestDay = busiest.DayName;
+            report.BusiestDayBookings = busiest.Bookings.Count;
         }
 
+        report.AverageTicketPrice = weeklyBookings.Any()
+            ? weeklyBookings.Average(b => b.TicketPrice)
+            : 0;
 
+        report.MostUsedTrain = weeklyBookings.Any()
+            ? weeklyBookings
+                .GroupBy(b => b.TrainName)
+                .OrderByDescending(g => g.Count())
+                .First()
+                .Key
+            : "N/A";
 
-        report.AverageTicketPrice =
-            weeklyBookings.Any()
-            ?
-            weeklyBookings.Average(b=>b.TicketPrice)
-            :
-            0;
-
-
-
-        report.MostUsedTrain =
-            weeklyBookings.Any()
-            ?
-            weeklyBookings
-            .GroupBy(b=>b.TrainName)
-            .OrderByDescending(g=>g.Count())
-            .First()
-            .Key
-            :
-            "N/A";
-
-
-
-        report.BookingStatusSummary =
-            weeklyBookings
-            .GroupBy(b=>b.Status)
+        report.BookingStatusSummary = weeklyBookings
+            .GroupBy(b => b.Status)
             .ToDictionary(
-                g=>g.Key,
-                g=>g.Count());
-
-
+                g => g.Key,
+                g => g.Count());
 
         return report;
     }
